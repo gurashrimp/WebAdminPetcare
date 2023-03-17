@@ -219,6 +219,9 @@ const numberWithComma = (x) => {
   }
 };
 //send notification to app
+router.get("/sendToAll", function (req, res, next) {
+  res.render("notification");
+});
 router.post("/sendToAll",(req,res)=>{
   var notification ={
     'title':'Testing ',
