@@ -2,7 +2,9 @@ const fetchAPI = async (url, option) => {
     const res = await fetch(url, option);
     return res.json();
 }
-
+const sendToAll=async (id)=>{
+       window.location.href = `http://localhost:3001/${id}/sendToAll`
+}
 const onDelete = async (id) => {
     const url = `http://localhost:3001/${id}/delete`;
     const option = {

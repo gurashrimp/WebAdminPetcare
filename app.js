@@ -4,6 +4,8 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var session = require('express-session');
+const { initializeApp } = require('firebase-admin/app');
+
 
 const mongoose = require('mongoose');
 require('./components/products/model');
@@ -14,6 +16,7 @@ var router = require('./routes/router');
 var api = require('./routes/api');
 
 var app = express();
+
 app.use(express.static('public'));
 
 require('./components/employee/model');

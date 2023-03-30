@@ -17,7 +17,7 @@ exports.getAllstore = async () => {
 exports.delete = async (id) => {
     await storeModel.findByIdAndDelete(id);
 }
-exports.getstoreById = async (id) => {
+exports.getStoreById = async (id) => {
     const store = await storeModel.findById(id);
     return store;
 };

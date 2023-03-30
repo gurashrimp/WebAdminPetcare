@@ -63,19 +63,24 @@ exports.getStores = async () => {
         return false;
     }
 }
-exports.getCustomerById = async (id) => {
+exports.getStoreById = async (id) => {
     try {
-        let customer = await customerService.getCustomerById(id);
-        customer = {
-            id: customer.id,
-            password: customer.password,
-            name: customer.name,
-            email: customer.email,
-            phone: customer.phone,
-            address: customer.address,
-            image: customer.image
+        let store = await storeService.getStoreById(id);
+        store = {
+            _id: store._id,
+            nameStore: store.nameStore,
+            emailStore: store.emailStore,
+            passwordStore: store.passwordStore,
+            starStore: store.starStore,
+            addressStore : store.addressStore,
+            phoneStore : store.phoneStore,
+            otpMailStore : store.otpMailStore,
+            avtStore: store.avtStore,
+            descriptionStore: store.descriptionStore,
+            socketId : store.socketId,
+            tokenFCM : store.tokenFCM
         }
-        return customer;
+        return store;
     }
     catch (error) {
         console.log('error', error);

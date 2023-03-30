@@ -222,28 +222,51 @@ const numberWithComma = (x) => {
 router.get("/sendToAll", function (req, res, next) {
   res.render("notification");
 });
-router.post("/sendToAll",(req,res)=>{
-  var notification ={
-    'title':'Testing ',
-    'text':'Hello! Its a me, Mario!'
-  };
-  var fcm_token= ['dnw4n3NgRx6JtcSVA6jNiS:APA91bFbHYPEui0Q6kiEnMuaco9Lmr2QkPwAMh-mp3NQUV0tZEgM2OYZN8HoaWMglVSFAjdzS9GpgPKJcKzMclrmyhJMp0OtQxy2EhnV_P-XcTPJeTOm_tlraQG4wVyEsIsIz8U3jbKi'];
-  var notification_body={
-    'notification':notification,
-    'registration_ids':fcm_token,
+router.get("/:id/sendToAll",async function(req,res,next){
+  const { id } = req.params;
+  const store = await storeController.getStoreById(id);
+  // console.log("store", store);
+  
+  res.render("notification", {
+    store: store
+  });
+});
+router.post("/:id/sendToAll", async function (req,res,next){
+  
+  const { id } = req.params;
+  const store = await storeController.getStoreById(id);
+  const token=req.body.token;
 
-  };
+
+ const title=req.body.title;
+ const content=req.body.content;
+ const server=req.body.key;
+  var notification ={
+        'title':'Testing ',
+        'body':'Hello! Its a me, Mario!'
+      };
+      // dnw4n3NgRx6JtcSVA6jNiS:APA91bFbHYPEui0Q6kiEnMuaco9Lmr2QkPwAMh-mp3NQUV0tZEgM2OYZN8HoaWMglVSFAjdzS9GpgPKJcKzMclrmyhJMp0OtQxy2EhnV_P-XcTPJeTOm_tlraQG4wVyEsIsIz8U3jbKi
+      var notification_body={ "to" : ""+token,
+       "collapse_key" : "type_a",
+        "notification" : { "body" : ""+content,
+         "title": ""+title }, 
+         "data" : { "body" : "First Notification ",
+          "title": "Collapsing A",
+           "key_1" : "Data for key one",
+            "key_2" : "Hellowww" }}
   
   
   fetch('https://fcm.googleapis.com/fcm/send',{
     'method':'POST',
-    'header':{
-      'Authorization':'key='+'AAAApOYOtpU:APA91bHZ8arumZhz9tbPYspBxpXwF31KizKudMzuo2D1Z_p4AziU0sZhH5Na9Js0kWReYrNBopgRq7Lun8SCBVRIjMCvfTels1oSD6RuG-4TO-L8u740AnDF2YRW_roYS8Ulj_kCWdTB',
+    'headers':{
+      // AAAApOYOtpU:APA91bHZ8arumZhz9tbPYspBxpXwF31KizKudMzuo2D1Z_p4AziU0sZhH5Na9Js0kWReYrNBopgRq7Lun8SCBVRIjMCvfTels1oSD6RuG-4TO-L8u740AnDF2YRW_roYS8Ulj_kCWdTB
+      'Authorization':'key='+server,
       'Content-Type':'application/json'
     },
     'body':JSON.stringify(notification_body)
   }).then(()=>{
     res.status(200).send('Notification sent successfully');
+    console.log(JSON.stringify(notification_body));
   })
   .catch((err)=>{
     res.status(400).send('Notification sent failed');
