@@ -8,9 +8,7 @@ const { initializeApp } = require('firebase-admin/app');
 
 
 const mongoose = require('mongoose');
-require('./components/products/model');
-require('./components/brands/model');
-require('./components/categories/model');
+
 
 var router = require('./routes/router');
 var api = require('./routes/api');
@@ -19,7 +17,7 @@ var app = express();
 
 app.use(express.static('public'));
 
-require('./components/employee/model');
+// require('./components/employee/model');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -37,13 +35,13 @@ app.use(session({
   cookie: { secure: false }
 }))
 
-mongoose.connect('mongodb+srv://gurashrimp:1410nghi@cluster0.9vxm1.mongodb.net/myFirstDatabase?retryWrites=true&w=majority', {
+const connectDB = async()=>{mongoose.connect('mongodb+srv://phpmongodb:dunghoitao1@testmongo.rmuwr.mongodb.net/graduation_BE?retryWrites=true&w=majority', {
   useNewUrlParser: true,
   useUnifiedTopology: true
 })
   .then(() => console.log('DB Connected !'))
-  .catch(err => console.log('DB Error: ', err));
-
+  .catch(err => console.log('DB Error: ', err));}
+connectDB();
 app.use('/', router);
 app.use('/api', api);
 

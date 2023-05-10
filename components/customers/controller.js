@@ -44,11 +44,11 @@ exports.getCustomers = async () => {
             item = {
                 _id: item._id,
                 password: item.password,
-                name: item.name,
-                email: item.email,
-                phone: item.phone,
+                nameAccount: item.nameAccount,
+                emailAccount: item.emailAccount,
+                numberphone: item.numberphone,
                 address: item.address,
-                image: item.image
+                tokenFCM: item.tokenFCM
             }
             return item;
         })
@@ -62,13 +62,13 @@ exports.getCustomerById = async (id) => {
     try {
         let customer = await customerService.getCustomerById(id);
         customer = {
-            id: customer.id,
-            password: customer.password,
-            name: customer.name,
-            email: customer.email,
-            phone: customer.phone,
+            _id: customer._id,
+            passWordAccount: customer.passWordAccount,
+            nameAccount: customer.nameAccount,
+            emailAccount: customer.emailAccount,
+            numberphone: customer.numberphone,
             address: customer.address,
-            image: customer.image
+            tokenFCM: customer.tokenFCM
         }
         return customer;
     }
@@ -86,11 +86,11 @@ exports.delete = async (id) => {
 }
 
 exports.getById = async (id) => {
-    let customer = await customerService.getById(id);
-    customer = {
-        ...customer?._doc
+    let user = await customerService.getById(id);
+    user = {
+        ...user?._doc
     }
-    return customer;
+    return user;
 }
 
 exports.getAll = async () => {
@@ -104,8 +104,8 @@ exports.getAll = async () => {
     return data;
 }
 
-exports.update = async (id, name, phone, address, email) => {
-    return await customerService.update(id, name, phone, address, email);
+exports.update = async (id, nameAccount, phone, address, email) => {
+    return await customerService.update(id, nameAccount, phone, address, email);
 }
 
 exports.getById = async (id) => {

@@ -49,7 +49,9 @@ exports.getStores = async () => {
                 starStore: item.starStore,
                 addressStore : item.addressStore,
                 phoneStore : item.phoneStore,
-                otpMailStore : item.otpMailStore,
+                idProductStore: item.idProductStore,
+                idServiceStore : item.idServiceStore,
+                idpetStore : item.idpetStore,
                 avtStore: item.avtStore,
                 descriptionStore: item.descriptionStore,
                 socketId : item.socketId,
@@ -114,8 +116,8 @@ exports.getAll = async () => {
     return data;
 }
 
-exports.update = async (id, name, phone, address, email) => {
-    return await customerService.update(id, name, phone, address, email);
+exports.update = async (id, nameStore, phoneStore, address, emailStore) => {
+    return await storeService.update(id, nameStore, phoneStore, address, emailStore);
 }
 
 exports.getById = async (id) => {

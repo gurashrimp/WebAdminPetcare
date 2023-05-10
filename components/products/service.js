@@ -1,18 +1,18 @@
 const productModel = require('./model');
 
 exports.getAllProduct = async () => {
-    return await productModel.find({}).populate('categoryId brandId');
+    return await productModel.find({});
 }
 
 exports.getProductById = async (id) => {
     console.log('id product', id);
-    const product = await productModel.findById(id).populate('categoryId brandId');
+    const product = await productModel.findById(id);
     // console.log('product service',product);0
     return product;
 };
 exports.getProductByName = async (name) => {
     console.log('id product', name);
-    const product = await productModel.findB(id).populate('categoryId brandId');
+    const product = await productModel.findB(id);
     // console.log('product service',product);
     return product;
 };
@@ -30,5 +30,5 @@ exports.delete = async (id) => {
 }
 
 exports.getById = async (id) => {
-    return await productModel.findById(id).populate('categoryId brandId');
+    return await productModel.findById(id);
 }

@@ -1,8 +1,7 @@
 const orderController = require('../components/orders/controller');
 const productController = require('../components/products/controller');
 const customerController = require('../components/customers/controller');
-// const cartController = require('../components/cart_item/controller');
-const orderItemController = require('../components/order_item/controller');
+
 const { enumStatusOrder } = require('../utils/constants');
 
 class OrderController {
@@ -12,7 +11,7 @@ class OrderController {
         const { id } = req.params;
         let orders = await orderController.getAll();
         orders = orders.filter(item => {
-            return item.user_id == id;
+            return item.idUserAccount == id;
         });
         res.json(orders);
     }
@@ -21,7 +20,7 @@ class OrderController {
         let { body } = req;
         // console.log("body>>", body);
         const data = {
-            user_id: body.userID,
+            userId: body.userID,
             payment_id: body.payment_id,
             status: enumStatusOrder.pending,
             total: body.total,
@@ -82,7 +81,7 @@ class OrderController {
         // console.log('req.params ne >>', req.params)
         if (orders.length > 0) {
             orders = orders.filter(item => {
-                return item.user_id.equals(id) && item.status.code == enumStatusOrder.pending.code;
+                return item.idUserAccount.equals(id) && item.status.code == enumStatusOrder.pending.code;
             });
             res.json(orders);
         // console.log('orders ne >>', orders)
@@ -96,7 +95,7 @@ class OrderController {
         let orders = await orderController.getAll();
         if (orders.length > 0) {
             orders = orders.filter(item => {
-                return item.user_id.equals(id) && item.status.code == enumStatusOrder.shipping.code;
+                return item.idUserAccount.equals(id) && item.status.code == enumStatusOrder.shipping.code;
             });
             res.json(orders);
         } else {
@@ -110,7 +109,7 @@ class OrderController {
         let orders = await orderController.getAll();
         if (orders.length > 0) {
             orders = orders.filter(item => {
-                return item.user_id.equals(id) && item.status.code == enumStatusOrder.canceled.code;
+                return item.idUserAccount.equals(id) && item.status.code == enumStatusOrder.canceled.code;
             });
             res.json(orders);
         } else {
@@ -142,7 +141,7 @@ class OrderController {
         let orders = await orderController.getAll();
         if (orders.length > 0) {
             orders = orders.filter(item => {
-                return item.user_id.equals(id) && item.status.code === enumStatusOrder.taken.code;
+                return item.idUserAccount.equals(id) && item.status.code === enumStatusOrder.taken.code;
             });
             res.json(orders);
         } else {
@@ -164,7 +163,7 @@ class OrderController {
         } = req.params;
 
         const order = await orderController.getById(id);
-        const _user = await customerController.getById(order.user_id);
+        const _user = await customerController.getById(order.idUserAccount);
         const orderItem = await orderItemController.getAll(id);
         const list = orderItem.map(async (item) => {
             const p = await productController.getById(item.product_each);
@@ -272,9 +271,7 @@ class OrderController {
 
     async getSold(req, res, next) {
         let orders = await orderController.getAll();
-        orders = orders.filter(item => {
-            return item.status.code == 3;   //get don hang thanh cong
-        })
+        
         res.json(orders);
     }
 }

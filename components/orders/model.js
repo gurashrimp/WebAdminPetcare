@@ -7,22 +7,27 @@ const orderSchema = new Schema({
     id: {
         type: ObjectId
     },
-    payment_id: {
-        type: Number
+    idUserAccount: {
+        type: Schema.Types.ObjectId,
+        ref: 'accounts',
     },
-    status: {
-        type: Object,
-        default: enumStatusOrder.pending
+    idAccountStore: {
+        type: Schema.Types.ObjectId,
+        ref: 'accountstores',
     },
-    total: {
-        type: Number
+    ProductId: {
+        type: Schema.Types.ObjectId,
+        ref: 'productstores',
     },
-    user_id: {
-        type: ObjectId,
-        ref: 'customer',
+    PetId: {
+        type: Schema.Types.ObjectId,
+        ref: 'petstores',
     },
-    createdAt: {type: Date, default: Date.now}
+    ServiceId: {
+        type: Schema.Types.ObjectId,
+        ref: 'servicestores',
+    }
 });
 
 orderSchema.set('timestamps', true);
-module.exports = mongoose.model('order', orderSchema);
+module.exports = mongoose.model('cartoders', orderSchema);

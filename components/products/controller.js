@@ -18,8 +18,6 @@ exports.getProducts = async (sort) => {
         newProducts = newProducts.map((item) => {
             item = {
                 _id: item._id,
-                categoryId: item.categoryId,
-                brandId: item.brandId,
                 name: item.name,
                 price: item.price,
                 image: item.image,
@@ -45,8 +43,6 @@ exports.getProductById = async (id) => {
         let product = await productService.getProductById(id);
         product = {
             _id: product._id,
-            categoryId: product.categoryId,
-            brandId: product.brandId,
             name: product.name,
             price: product.price,
             image: product.image,

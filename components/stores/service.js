@@ -28,12 +28,12 @@ exports.getById = async (id) => {
 }
 
 exports.getAll = async () => {
-    const stores = storeModel.find().sort({ username: 1});
+    const stores = storeModel.find().sort({ nameStore: 1});
     return stores;
 }
 
-exports.update = async (id, name, phone, address, email) => {
-    return await storeModel.findByIdAndUpdate(id, {name:name , phone:phone, email:email, address: address});
+exports.update = async (id, nameStore, phoneStore, addressStore, emailStore) => {
+    return await storeModel.findByIdAndUpdate(id, nameStore ,emailStore, addressStore,phoneStore);
 }
 
 exports.updatePassword = async (id, newPassword) => {

@@ -68,12 +68,12 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link " href="/orders">
+          <a class="nav-link " href="/notification">
             <div
               class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="ni ni-app text-info text-sm opacity-10"></i>
             </div>
-            <span class="nav-link-text ms-1">Đơn hàng</span>
+            <span class="nav-link-text ms-1">Thông báo đã gửi </span>
           </a>
         </li>
         {{!-- 
@@ -172,40 +172,46 @@
               </div>
             </div>
             <div class="card-body px-0 pt-0 pb-2">
-              <div class="table-responsive p-0">
+              <div class="table-responsive p-4">
                 <table class="table align-items-center mb-0">
                   <thead>
                     <tr>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Tên khách hàng
                       </th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Địa chỉ</th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Số
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ">Địa chỉ/Số
                         điện thoại</th>
-                      <th class="text-secondary opacity-7"></th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Email</th>
+                      
                     </tr>
                   </thead>
                   <tbody>
                     {{#each customers}}
                     <tr>
-                      <td>
+                      <td style="column-width: 200px;">
                         <div class="d-flex px-2 py-1">
                           <div>
                             <img src="../assets/img/team-2.jpg" class="avatar avatar-sm me-3" alt="user1">
                           </div>
                           <div class="d-flex flex-column justify-content-center">
-                            <h6 class="mb-0 text-md">{{this.name}}</h6>
-                            <p class="text-sm text-secondary mb-0">Mã khách hàng: .....{{this.idU}}</p>
+                            <h6 class="mb-0 text-sm" style="display: space-evenly;"
+                             >{{this.nameAccount}}</h6>
+                            <p class="text-sm text-secondary mb-0">Mã khách hàng:{{this.idU}}</p>
                           </div>
                         </div>
                       </td>
-                      <td>
-                        <p class="text-xs font-weight-bold mb-0">{{this.address}}</p>
-                        <p class="text-xs text-secondary mb-0">{{this.email}}</p>
+                      <td class="align-middle text-center text-sm">
+                        <div class="d-flex flex-column justify-content-center">
+                        <span class="badge badge-sm bg-gradient-info" style="margin-bottom: 10px;">{{this.address}}</span>
+                        <span class="badge badge-sm bg-gradient-warning">{{this.numberphone}}</span>
+                        </div>
                       </td>
                       <td class="align-middle text-center">
-                        <span class="text-secondary text-xs font-weight-bold">{{this.phone}}</span>
+                        <span class="text-secondary text-xs font-weight-bold">{{this.emailAccount}}</span>
                       </td>
-                      <td class="align-middle">
+                      <td class="d-flex flex-column ">
+                        <button onclick="sendToAll('{{this._id}}')" class="btn btn-xs mb-3 mt-3 btn-outline-secondary">
+                          Send Notification
+                        </button>
                         <button onclick="onDeleteCustomer('{{this._id}}')" class="btn btn-xs btn-outline-danger">
                           Delete
                         </button>

@@ -7,7 +7,7 @@ const customerController = require('../components/customers/controller');
 const productController = require('../components/products/controller');
 const orderController = require('../components/OrderController');
 const UserController = require("../components/UserController");
-const otpController = require('../components/otp/controller')
+
 
 /* API EMPLOYEE. */
 router.post("/login", async function (req, res, next) {
@@ -60,18 +60,18 @@ router.post("/customer/register", async function (req, res, next) {
 });
 
 /* API PRODUCT. */
-router.get("/products", async function (req, res, next) {
-    const { sort } = req.query;
-    console.log('sortttt', sort);
-    const products = await productController.getProducts(sort);
-    res.json(products);
-});
+// router.get("/products", async function (req, res, next) {
+//     const { sort } = req.query;
+//     console.log('sortttt', sort);
+//     const products = await productController.getProducts(sort);
+//     res.json(products);
+// });
 
-router.get("/products/:id/detail", async function (req, res, next) {
-    const { id } = req.params;
-    const product = await productController.getProductById(id);
-    res.json(product);
-});
+// router.get("/products/:id/detail", async function (req, res, next) {
+//     const { id } = req.params;
+//     const product = await productController.getProductById(id);
+//     res.json(product);
+// });
 router.get("/customers", async function (req, res, next) {
     const { id } = req.params;
     const customer = await customerController.getCustomers();
@@ -95,15 +95,15 @@ router.post('/verifyOtp', async (req, res, next) => {
     res.status(result.status).json(result)
 })
 
-router.post('/customers/:id/cart/checkout', orderController.create);
-router.get('/customers/:id/orders', orderController.index);
-router.get('/customers/:id/orders/pending/get', orderController.pendingList);
-router.get('/customers/:id/orders/shipping/get', orderController.shippingList);
-router.get('/customers/:id/orders/cancel/get', orderController.cancelList);
-router.get('/customers/:id/orders/taken/get', orderController.takenList);
-router.post('/customers/:id/orders/:ido/cancel', orderController.cancelByUser);
-router.post('/customers/:id/orders/:ido/receive', orderController.receive);
-router.get('/customers/:id/orders/:ido', orderController.one);
+// router.post('/customers/:id/cart/checkout', orderController.create);
+// router.get('/customers/:id/orders', orderController.index);
+// router.get('/customers/:id/orders/pending/get', orderController.pendingList);
+// router.get('/customers/:id/orders/shipping/get', orderController.shippingList);
+// router.get('/customers/:id/orders/cancel/get', orderController.cancelList);
+// router.get('/customers/:id/orders/taken/get', orderController.takenList);
+// router.post('/customers/:id/orders/:ido/cancel', orderController.cancelByUser);
+// router.post('/customers/:id/orders/:ido/receive', orderController.receive);
+// router.get('/customers/:id/orders/:ido', orderController.one);
 //
 // router.get('/orders', orderController.indexweb);
 

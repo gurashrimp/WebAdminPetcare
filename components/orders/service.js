@@ -2,7 +2,7 @@ const orderModel = require('./model')
 const { enumStatusOrder } = require('../../utils/constants');
 
 exports.getAll = async () => {
-    const o = await orderModel.find().populate(['user_id']).sort({ updatedAt: -1 });
+    const o = await orderModel.find().populate(['idUserAccount']).sort({ updatedAt: -1 });
     return o;
 }
 
@@ -14,7 +14,7 @@ exports.insert = async (order) => {
 
 
 exports.getById = async (id) => {
-    const one = await orderModel.findById(id).populate(['user_id']);
+    const one = await orderModel.findById(id).populate(['idUserAccount']);
     return one;
 }
 

@@ -3,23 +3,28 @@ var express = require("express");
 var router = express.Router();
 var jwt=require("jsonwebtoken");
 const upload = require("../utils/upload");
-const brandController = require("../components/brands/controller");
-const categoriesController = require("../components/categories/controller");
 const productController = require("../components/products/controller");
 const customerController = require("../components/customers/controller");
 const employeeController = require("../components/employee/controller");
 const productModel = require("../components/products/model");
 const customerModel = require("../components/customers/model");
 const employeeModel = require("../components/employee/model");
+const notifyModel = require("../components/notification/model");
+const tokenModel = require("../components/fcm_tokens/model");
 const orderController = require("../components/OrderController");
 const storeModel = require("../components/stores/model");
 const storeController = require("../components/stores/controller");
+const notifyController = require("../components/notification/controller");
+const tokenController = require("../components/fcm_tokens/controller")
 // import fetch from "node-fetch";
 const fetch = (...args) =>
   import('node-fetch').then(({ default: fetch }) => fetch(...args));
 /* EMPLOYEE. */
 router.get("/login", function (req, res, next) {
   res.render("login");
+});
+router.get("/logout", function (req, res, next) {
+  res.redirect("/login");
 });
 router.get("/register", function (req, res, next) {
   res.render("register");
@@ -112,7 +117,15 @@ router.get("/:id/product_update", async function (req, res, next) {
     brands: brands,
   });
 });
-
+router.get("/:id/store_update", async function (req, res, next) {
+  const { id } = req.params;
+  const store = await storeController.getStoreById(id);
+  // console.log("product", product);
+  
+  res.render("store_update", {
+    store: store
+  });
+});
 router.post(
   "/:id/product_update",
   [upload.single("image")],
@@ -128,13 +141,27 @@ router.post(
     res.redirect("/products");
   }
 );
-
+router.post(
+  "/:id/store_update",
+  [upload.single("image")],
+  async function (req, res, next) {
+    let { body, file, params } = req;
+    delete body.image;
+    if (file) {
+      // let image = `http://192.168.43.229:3001/images/${file.filename}`
+      let image = `http://localhost:3001/images/${file.filename}`;
+      body = { ...body, image };
+    }
+    await storeController.update(params.id, body);
+    res.redirect("/stores");
+  }
+);
 /* CUSTOMER. */
 router.get("/customers", async function (req, res, next) {
-  const name = req.query.name;
-  if (name) {
+  const nameAccount = req.query.nameAccount;
+  if (nameAccount) {
     customerModel
-      .find({ name: { $regex: new RegExp(name), $options: "i" } })
+      .find({ nameAccount: { $regex: new RegExp(nameAccount), $options: "i" } })
       .then((data) => {
         res.render("customers", { customers: data });
       });
@@ -171,7 +198,27 @@ router.get("/stores", async function (req, res, next) {
     res.render("stores", { stores: stores });
   }
 });
-
+router.get("/notification", async function (req, res, next) {
+  const title = req.query.title;
+  if (title) {
+    notifyModel
+      .find({ title: { $regex: new RegExp(title), $options: "i" } })
+      .then((data) => {
+        res.render("notifications", { notifies: data });
+      });
+  } else {
+    const data = await notifyController.getNotifies();
+    const notifies = data.map((c)=>{
+      c={
+        ...c,
+        idU: c._id.toString().slice(-4)
+      }
+      return c
+    })
+    console.log('notify',notifies)
+    res.render("notifications", { notifies: notifies });
+  }
+});
 router.delete("/:id/deleteCustomer", async function (req, res, next) {
   const { id } = req.params;
   await customerController.delete(id);
@@ -219,58 +266,141 @@ const numberWithComma = (x) => {
   }
 };
 //send notification to app
-router.get("/sendToAll", function (req, res, next) {
-  res.render("notification");
-});
+
 router.get("/:id/sendToAll",async function(req,res,next){
   const { id } = req.params;
-  const store = await storeController.getStoreById(id);
+  // const store = await storeController.getStoreById(id);
   // console.log("store", store);
-  
+  const customer= await customerController.getCustomerById(id);
+  console.log("customer",customer);
   res.render("notification", {
-    store: store
+    customer: customer
+  });
+});
+router.get("/sendToAll",async function(req,res,next){
+  
+  // const store = await storeController.getStoreById(id);
+  // console.log("store", store);
+  const tokens= await tokenController.getTokens();
+  var fcm_tokens=[tokens];
+  console.log("token",tokens);
+  res.render("sendtoall", {
+    tokens: tokens
   });
 });
 router.post("/:id/sendToAll", async function (req,res,next){
-  
+  let { body} = req;
   const { id } = req.params;
-  const store = await storeController.getStoreById(id);
-  const token=req.body.token;
-
-
+  const customer = await customerController.getCustomerById(id);
+  const token=customer.tokenFCM;
+  const sender="Admin";
  const title=req.body.title;
  const content=req.body.content;
  const server=req.body.key;
-  var notification ={
-        'title':'Testing ',
-        'body':'Hello! Its a me, Mario!'
-      };
+  const type=customer.nameAccount;
+ body = { ...body, sender ,type};
+ const notify = new notifyModel(body);
+ console.log('notify',notify);
+
+
+
       // dnw4n3NgRx6JtcSVA6jNiS:APA91bFbHYPEui0Q6kiEnMuaco9Lmr2QkPwAMh-mp3NQUV0tZEgM2OYZN8HoaWMglVSFAjdzS9GpgPKJcKzMclrmyhJMp0OtQxy2EhnV_P-XcTPJeTOm_tlraQG4wVyEsIsIz8U3jbKi
       var notification_body={ "to" : ""+token,
        "collapse_key" : "type_a",
         "notification" : { "body" : ""+content,
-         "title": ""+title }, 
+         "title": ""+title,
+         "image": "https://firebasestorage.googleapis.com/v0/b/fptl-4872d.appspot.com/o/Picture1.jpg?alt=media&token=497a5cbf-48bd-4ccb-a4c8-a590d36fcf51"
+        }, 
+        
          "data" : { "body" : "First Notification ",
           "title": "Collapsing A",
            "key_1" : "Data for key one",
             "key_2" : "Hellowww" }}
-  
+            
   
   fetch('https://fcm.googleapis.com/fcm/send',{
     'method':'POST',
     'headers':{
       // AAAApOYOtpU:APA91bHZ8arumZhz9tbPYspBxpXwF31KizKudMzuo2D1Z_p4AziU0sZhH5Na9Js0kWReYrNBopgRq7Lun8SCBVRIjMCvfTels1oSD6RuG-4TO-L8u740AnDF2YRW_roYS8Ulj_kCWdTB
-      'Authorization':'key='+server,
+      'Authorization':'key=AAAApOYOtpU:APA91bHZ8arumZhz9tbPYspBxpXwF31KizKudMzuo2D1Z_p4AziU0sZhH5Na9Js0kWReYrNBopgRq7Lun8SCBVRIjMCvfTels1oSD6RuG-4TO-L8u740AnDF2YRW_roYS8Ulj_kCWdTB',
       'Content-Type':'application/json'
     },
     'body':JSON.stringify(notification_body)
-  }).then(()=>{
-    res.status(200).send('Notification sent successfully');
+  }).then(async ()=>{
+    await notifyController.insert(body);
+    console.log('thêm notify thành công',body);
+    // res.status(200).send('Notification sent successfully');
     console.log(JSON.stringify(notification_body));
+    res.redirect("/notification");
   })
   .catch((err)=>{
     res.status(400).send('Notification sent failed');
     console.log(err);
   });
+  
+    // console.log("req.file", file);
+})
+router.post("/sendToAll", async function (req,res,next){
+  let { body} = req;
+  
+  const tokens= await tokenController.getTokens();
+  var fcm_tokens=[
+    'faIS8wCBTMW1vABLYBwfFs:APA91bEMO1rbvfMHyOjtrmVXB1enYKQ-7cm3xdBq2HJJnczcdTJxb-dS_dIE6ek8F5qKPNvWCUfnnEl5otKZQvDiQNV_pPLTxTCIW3gCjk-q-n53GwUIkfghM0jNz9sdgsLc0Ydf5Z4u',
+    'eVkOsmu1SJWy_diFOzVZIv:APA91bEUNpKPu4SEAXk6235I6EoAYjQGZ9APtDg507I2Zzu5u7rl4OfU3aXqfCXfYUEK-Sb7tryRUORdp994WTf73E9iesy1fQgLP-H_bvhmnwsB7sf2H5mnNMmm9KlgM_j55BFR7cyy',
+    'fGv8437oSh6L3V-ldr4usr:APA91bGnUVulDlwRA1K632VhcLeCS36Wzg6JdwtUkK8zFGZYx7OC8uGXnGvk7HTaWfuMjDrPN7E6TTw5Li2nbbwuzptNgFTdX3NMDk_21a2hnlikZpmzBjbOLx2nE1tXhGU3WkL06btL'
+  ]
+  const sender="Admin";
+ const title=req.body.title;
+ const content=req.body.content;
+ const server=req.body.key;
+  const type="Tất cả";
+ body = { ...body, sender,type };
+ const notify = new notifyModel(body);
+ console.log('notify',notify);
+
+
+      // var notification={
+      //   'title': ''+title,
+      //   'text': ''+content
+      // }
+      // var notification_body={
+      //   'notification': notification,
+      //   'registration_ids': fcm_tokens
+      // }
+      // dnw4n3NgRx6JtcSVA6jNiS:APA91bFbHYPEui0Q6kiEnMuaco9Lmr2QkPwAMh-mp3NQUV0tZEgM2OYZN8HoaWMglVSFAjdzS9GpgPKJcKzMclrmyhJMp0OtQxy2EhnV_P-XcTPJeTOm_tlraQG4wVyEsIsIz8U3jbKi
+      var notification_body={ "to" : "/topics/topic",
+       "collapse_key" : "type_a",
+        "notification" : { "body" : ""+content,
+         "title": ""+title,
+         "image": "https://firebasestorage.googleapis.com/v0/b/fptl-4872d.appspot.com/o/Picture1.jpg?alt=media&token=497a5cbf-48bd-4ccb-a4c8-a590d36fcf51"
+        }, 
+        
+         "data" : { "body" : "First Notification ",
+          "title": "Collapsing A",
+           "key_1" : "Data for key one",
+            "key_2" : "Hellowww" }}
+            
+  
+  fetch('https://fcm.googleapis.com/fcm/send',{
+    'method':'POST',
+    'headers':{
+      // AAAApOYOtpU:APA91bHZ8arumZhz9tbPYspBxpXwF31KizKudMzuo2D1Z_p4AziU0sZhH5Na9Js0kWReYrNBopgRq7Lun8SCBVRIjMCvfTels1oSD6RuG-4TO-L8u740AnDF2YRW_roYS8Ulj_kCWdTB
+      'Authorization':'key='+'AAAApOYOtpU:APA91bHZ8arumZhz9tbPYspBxpXwF31KizKudMzuo2D1Z_p4AziU0sZhH5Na9Js0kWReYrNBopgRq7Lun8SCBVRIjMCvfTels1oSD6RuG-4TO-L8u740AnDF2YRW_roYS8Ulj_kCWdTB',
+      'Content-Type':'application/json'
+    },
+    'body':JSON.stringify(notification_body)
+  }).then(async ()=>{
+    await notifyController.insert(body);
+    console.log('thêm notify thành công',body);
+    // res.status(200).send('Notification sent successfully');
+    console.log(JSON.stringify(notification_body));
+    res.redirect("/notification");
+  })
+  .catch((err)=>{
+    res.status(400).send('Notification sent failed');
+    console.log(err);
+  });
+  
+    // console.log("req.file", file);
 })
 module.exports = router;

@@ -19,7 +19,7 @@
   <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
   <!-- CSS Files -->
   <link id="pagestyle" href="../assets/css/argon-dashboard.css?v=2.0.4" rel="stylesheet" />
-  <script language="javascript" src="/javascripts/delete.js"></script>
+  <script language="javascript" src="/javascripts/update.js"></script>
 </head>
 
 <body class="g-sidenav-show   bg-gray-100">
@@ -32,7 +32,7 @@
         aria-hidden="true" id="iconSidenav"></i>
       <a class="navbar-brand m-0" href=" https://demos.creative-tim.com/argon-dashboard/pages/dashboard.html "
         target="_blank">
-        <img src="images/logo-ct-dark.png" class="navbar-brand-img h-100" alt="main_logo">
+        <img src="../images/logo-ct-dark.png" class="navbar-brand-img h-100" alt="main_logo">
         <span class="ms-1 font-weight-bold">Pet Care</span>
       </a>
     </div>
@@ -49,7 +49,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link " href="/stores">
+          <a class="nav-link active" href="/stores">
             <div
               class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="ni ni-calendar-grid-58 text-warning text-sm opacity-10"></i>
@@ -67,15 +67,14 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" href="/orders">
+          <a class="nav-link " href="/notification">
             <div
               class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="ni ni-app text-info text-sm opacity-10"></i>
             </div>
-            <span class="nav-link-text ms-1">Đơn hàng</span>
+            <span class="nav-link-text ms-1">Thông báo đã gửi </span>
           </a>
         </li>
- 
       </ul>
     </div>
 
@@ -88,15 +87,15 @@
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
             <li class="breadcrumb-item text-sm"><a class="opacity-5 text-white" href="javascript:;">Trang chủ</a></li>
-            <li class="breadcrumb-item text-sm text-white active" aria-current="page">Đơn hàng</li>
+            <li class="breadcrumb-item text-sm text-white active" aria-current="page">Sản phẩm</li>
           </ol>
         </nav>
-        <form action="/products">
+        <form action="/stores">
           <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
             <div class="ms-md-auto pe-md-3 d-flex align-items-center">
               <div class="input-group">
                 <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
-                <input type="text" name="name" class="form-control" placeholder="Tìm kiếm đơn hàng ..">
+                <input type="text" name="name" class="form-control" placeholder="Tìm kiếm sản phẩm ..">
               </div>
             </div>
           </div>
@@ -104,72 +103,68 @@
       </div>
     </nav>
     <!-- End Navbar -->
-    <div class="container-fluid py-4">
-      <div class="row">
-        <div class="col-12">
-          <div class="card mb-4">
-            <div class="card-header pb-3 p-3 d-flex">
-              <div class="row">
-                <h4 class="m-3 text-end">DANH SÁCH ĐƠN HÀNG</h4>
+    <div class="container-fluid py-2">
+      <div class="row ">
+        <form role="form" method="post" action="/{{store._id}}/store_update" enctype="multipart/form-data">
+          <div class="col-md-8">
+            <div class="card">
+              <div class="card-header pb-0">
+                <div class="d-flex align-items-center">
+                  <h4 class="mb-0">Chỉnh sửa cửa hàng</h4>
+                  <button class="btn btn-primary btn-sm ms-auto" type="submit" id="submit">Lưu</button>
+                </div>
               </div>
-              <div class="col-9 text-end">
-              </div>
-            </div>
-            <div class="card-body px-0 pt-0 pb-2">
-              <div class="table-responsive p-4">
-                <table class="table align-items-center mb-0">
-                  <thead>
-                    <tr>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Mã đơn hàng</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2" style="margin-left: -100px;">Ngày cập nhật</th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Tổng tiền (đ)</th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Tình trạng</th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Tùy chọn</th>
-                      <th class="text-secondary opacity-7"></th>
-                    </tr>
-                  </thead>
-                    {{#each orders}}
-                  <tbody>
-                    <tr>
-                      <td>
-                        <div class="d-flex px-2 py-1">
-                          <div>
-                            <img src="images/ivana-square.jpg" class="avatar avatar-sm me-3" alt="user1">
-                          </div>
-                          <div class="d-flex flex-column justify-content-center" style="width: 400px;">
-                            <h6 class="mb-0 text-sm" >{{this.user_id.nameAccount}}</h6>
-                            <p class="text-sm text-secondary mb-0">Mã đơn :{{this._id}}</p>
-                          </div>
-                          </div>
-                          </td>
-                          <td style="white-space:pre-line">
-                        <p class="text-xs font-weight-bold mb-0" style="margin-left: -100px;">{{this.updatedAt}}</p>
-                      </td>
-                      <td class="align-middle text-center text-sm">
-                        <div class="d-flex flex-column justify-content-center">
-                        <span class="badge badge-sm bg-gradient-dark" style="margin-bottom: 10px;"> {{this.total}} đ</span>
-                        
-                        </div>
-                      </td>
-                      <td class="align-middle text-center">
-                        <span class="text-secondary text-sm font-weight-bolder">{{this.status.name}}</span>
-                      </td>
-                      <td class="d-flex flex-column ">
-                        <button class="btn btn-xs mb-3 mt-3 btn-outline-primary">
-                          <a href="/orders/{{this._id}}">Xem</a>
-                        </button>
-                      </td>
-                    </tr>
-                  </tbody>
-                    {{/each}}
-                </table>
+              <div class="card-body">
+                <p class="text-uppercase text-sm">Thông tin cửa hàng</p>
+                <div class="col-md-10">
+                  <div class="form-group">
+                    <label for="example-text-input" class="form-control-label">Tên cửa hàng</label>
+                    <input required class="form-control" type="text" id="nameStore" name="nameStore" minlength="8"
+                      value="{{store.nameStore}}" />
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <label for="example-text-input" class="form-control-label">Địa chỉ</label>
+                      <input class="form-control" required type="text" id="addressStore" name="addressStore"  value="{{store.addressStore}}" />
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <label for="example-text-input" class="form-control-label">Số điện thoại</label>
+                      <input class="form-control" required type="text" id="phoneStore" name="phoneStore"  value="{{store.phoneStore}}" />
+                    </div>
+                  </div>
+                </div>
+                
+                <hr class="horizontal dark">
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <label for="example-text-input" class="form-control-label">Email</label>
+                      <input class="form-control" type="text" id="emailStore" name="emailStore" required value="{{store.emailStore}}">
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="example-text-input" class="form-control-label">Hình ảnh</label>
+                      <input type="file" id="image-file" onchange="onChangeFile()" name="imageStore" placeholder="click"/>
+
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="form-group" style="flex-direction: row;">
+                      <label for="example-text-input" class="form-control-label">Xem trước</label>
+                      <img id="image-view" width="200" height="200"  src="{{product.image}}"/>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        </form>
       </div>
-
-
     </div>
   </main>
   <div class="fixed-plugin">

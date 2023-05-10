@@ -68,12 +68,12 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link " href="/orders">
+         <a class="nav-link " href="/notification">
             <div
               class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="ni ni-app text-info text-sm opacity-10"></i>
             </div>
-            <span class="nav-link-text ms-1">Đơn hàng</span>
+            <span class="nav-link-text ms-1">Thông báo đã gửi </span>
           </a>
         </li>
         {{!-- <li class="nav-item">
@@ -166,7 +166,7 @@
                 <h4 class="m-3 text-end">Danh sách cửa hàng</h4>
               </div>
               <div class="col-9 text-end">
-                <button class="btn btn-outline-primary btn-sm mb-0"><a href="/product_insert">Thêm cửa hàng mới</a></button>
+                <button class="btn btn-outline-primary btn-sm mb-0"><a href="/store_insert">Thêm cửa hàng mới</a></button>
               </div>
             </div>
             <div class="card-body px-0 pt-0 pb-2">
@@ -175,7 +175,7 @@
                   <thead>
                     <tr>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Tên cửa hàng</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Mô tả</th>
+                      {{!-- <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Mô tả</th> --}}
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Địa chỉ/Số điện thoại</th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Email</th>
                       {{!-- <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"></th> --}}
@@ -188,7 +188,7 @@
                       <td style="column-width: 300px;">
                         <div class="d-flex px-2 py-1">
                           <div>
-                            <img src="{{this.image}}" class="avatar avatar-sm me-3" alt="user1">
+                            <img src="../assets/img/team-2.jpg" class="avatar avatar-sm me-3" alt="user1">
                           </div>
                           <div class="d-flex flex-column justify-content-center" style="width: 400px;">
                             <h6 class="mb-0 text-sm" style="display: inline-block;
@@ -196,13 +196,13 @@
                               white-space: nowrap;
                               overflow: hidden !important;
                               text-overflow: ellipsis;">{{this.nameStore}}</h6>
-                            {{!-- <p class="text-sm text-secondary mb-0">Giá tiền : {{this.price}}</p> --}}
+                            <p class="text-sm text-secondary mb-0">Mã cửa hàng: {{this.idU}}</p>
                           </div>
                           </div>
                           </td>
-                          <td style="white-space:pre-line">
+                          {{!-- <td style="white-space:pre-line">
                         <p class="text-xs font-weight-bold mb-0">{{this.descriptionStore}}</p>
-                      </td>
+                      </td> --}}
                       <td class="align-middle text-center text-sm">
                         <div class="d-flex flex-column justify-content-center">
                         <span class="badge badge-sm bg-gradient-info" style="margin-bottom: 10px;">{{this.addressStore}}</span>
@@ -216,7 +216,7 @@
                         <button onclick="sendToAll('{{this._id}}')" class="btn btn-xs mb-3 mt-3 btn-outline-secondary">
                           Send Notification
                         </button>
-                        <button onclick="edit('{{this._id}}')" class="btn btn-xs mb-3 mt-3 btn-outline-secondary">
+                        <button onclick="editStore('{{this._id}}')" class="btn btn-xs mb-3 mt-3 btn-outline-secondary">
                           Edit
                         </button>
                         <button onclick="onDelete('{{this._id}}')" class="btn btn-xs btn-outline-danger">

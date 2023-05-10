@@ -1,7 +1,9 @@
 const edit = (id) => {
     window.location.href = `http://localhost:3001/${id}/product_update`
 }
-
+const editStore = (id) => {
+    window.location.href = `http://localhost:3001/${id}/store_update`
+}
 const onChangeFile = () => {
     const file = document.getElementById('image-file').files[0];
     const reader = new FileReader();

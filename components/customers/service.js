@@ -5,8 +5,8 @@ exports.login = async (username) => {
     return customer;
 }
 
-exports.register = async (username, password, name, email, phone, address, image) => {
-    const customer = new customerModel({ username, password, name, email, phone, address, image });
+exports.register = async (username, password, nameAccount, email, phone, address, image) => {
+    const customer = new customerModel({ username, password, nameAccount, email, phone, address, image });
     return await customer.save();
 }
 
@@ -28,12 +28,12 @@ exports.getById = async (id) => {
 }
 
 exports.getAll = async () => {
-    const users = customerModel.find().sort({ username: 1});
+    const users = customerModel.find().sort({ nameAccount: 1});
     return users;
 }
 
-exports.update = async (id, name, phone, address, email) => {
-    return await customerModel.findByIdAndUpdate(id, {name:name , phone:phone, email:email, address: address});
+exports.update = async (id, nameAccount, numberphone, address, emailAccount) => {
+    return await customerModel.findByIdAndUpdate(id, nameAccount, numberphone, address, emailAccount);
 }
 
 exports.updatePassword = async (id, newPassword) => {

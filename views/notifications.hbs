@@ -7,7 +7,7 @@
   <link rel="icon" type="image/png" href="images/favicon.png">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
   <title>
-    LapTop Shop
+    Pet Care
   </title>
   <!--     Fonts and icons     -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
@@ -34,7 +34,7 @@
       <a class="navbar-brand m-0" href=" https://demos.creative-tim.com/argon-dashboard/pages/dashboard.html "
         target="_blank">
         <img src="images/logo-ct-dark.png" class="navbar-brand-img h-100" alt="main_logo">
-        <span class="ms-1 font-weight-bold">Laptop Shop</span>
+        <span class="ms-1 font-weight-bold">Pet Care</span>
       </a>
     </div>
     <hr class="horizontal dark mt-0">
@@ -50,16 +50,16 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link " href="/products">
+          <a class="nav-link " href="/stores">
             <div
               class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="ni ni-calendar-grid-58 text-warning text-sm opacity-10"></i>
             </div>
-            <span class="nav-link-text ms-1">Sản phẩm</span>
+            <span class="nav-link-text ms-1">Cửa hàng</span>
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active " href="/customers">
+          <a class="nav-link  " href="/customers">
             <div
               class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="ni ni-credit-card text-success text-sm opacity-10"></i>
@@ -68,12 +68,12 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link " href="/orders">
+          <a class="nav-link active" href="/notification">
             <div
               class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="ni ni-app text-info text-sm opacity-10"></i>
             </div>
-            <span class="nav-link-text ms-1">Đơn hàng</span>
+            <span class="nav-link-text ms-1">Thông báo đã gửi</span>
           </a>
         </li>
         {{!-- 
@@ -143,15 +143,15 @@
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
             <li class="breadcrumb-item text-sm"><a class="opacity-5 text-white" href="javascript:;">Trang chủ</a></li>
-            <li class="breadcrumb-item text-sm text-white active" aria-current="page">Khách hàng</li>
+            <li class="breadcrumb-item text-sm text-white active" aria-current="page">Thông báo</li>
           </ol>
         </nav>
-        <form action="/customers">
+        <form action="/notifications">
           <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
             <div class="ms-md-auto pe-md-3 d-flex align-items-center">
               <div class="input-group">
                 <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
-                <input type="text" name="name" class="form-control" placeholder="Tìm kiếm khách hàng ..">
+                <input type="text" name="title" class="form-control" placeholder="Tìm kiếm thông báo ..">
               </div>
             </div>
           </div>
@@ -165,10 +165,10 @@
           <div class="card mb-4">
             <div class="card-header pb-3 p-3 d-flex">
               <div class="row">
-                <h4 class="m-3 text-end">Danh sách khách hàng</h4>
+                <h4 class="m-3 text-end">Danh sách thông báo</h4>
               </div>
               <div class="col-9 text-end">
-                <button class="btn btn-outline-primary btn-sm mb-0">Thêm khách hàng mới</button>
+                <button class="btn btn-outline-primary btn-sm mb-0"><a href="/sendToAll">Gửi thông báo cho tất cả</a></button>
               </div>
             </div>
             <div class="card-body px-0 pt-0 pb-2">
@@ -176,40 +176,51 @@
                 <table class="table align-items-center mb-0">
                   <thead>
                     <tr>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Tên khách hàng
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Tiêu đề
                       </th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Địa chỉ</th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Số
-                        điện thoại</th>
-                      <th class="text-secondary opacity-7"></th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2 ">Nội dung</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Người gửi</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Người nhận</th>
+                      <th class="text-secondary opacity-7">Ngày gửi</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {{#each customers}}
+                    {{#each notifies}}
                     <tr>
                       <td>
                         <div class="d-flex px-2 py-1">
                           <div>
-                            <img src="../assets/img/team-2.jpg" class="avatar avatar-sm me-3" alt="user1">
+                            <img src="../images/picture1.jpg" class="avatar avatar-sm me-3" alt="user1">
                           </div>
                           <div class="d-flex flex-column justify-content-center">
-                            <h6 class="mb-0 text-md">{{this.name}}</h6>
-                            <p class="text-sm text-secondary mb-0">Mã khách hàng: .....{{this.idU}}</p>
+                            <h6 class="mb-0 text-md">{{this.title}}</h6>
+                            <p class="text-sm text-secondary mb-0">Mã thông báo:{{this.idU}}</p>
                           </div>
                         </div>
                       </td>
-                      <td>
-                        <p class="text-xs font-weight-bold mb-0">{{this.address}}</p>
-                        <p class="text-xs text-secondary mb-0">{{this.email}}</p>
+                      <td class="align-middle text-center text-sm">
+                        <div class="d-flex flex-column justify-content-center">
+                        <span class="badge badge-sm bg-gradient-info" style="margin-bottom: 10px;">{{this.content}}</span>
+                        <span class="badge badge-sm bg-gradient-warning"></span>
+                        </div>
                       </td>
                       <td class="align-middle text-center">
-                        <span class="text-secondary text-xs font-weight-bold">{{this.phone}}</span>
+                        <span class="text-secondary text-xs font-weight-bold">{{this.sender}}</span>
                       </td>
-                      <td class="align-middle">
+                      <td class="align-middle text-center">
+                        <span class="text-secondary text-xs font-weight-bold">{{this.type}}</span>
+                      </td>
+                      <td class="align-middle text-center">
+                        <span class="text-secondary text-xs font-weight-bold">{{this.createdAt}}</span>
+                      </td>
+                      {{!-- <td class="align-middle">
+                        <button onclick="sendToAll('{{this._id}}')" class="btn btn-xs mb-3 mt-3 btn-outline-secondary">
+                          Send Notification
+                        </button>
                         <button onclick="onDeleteCustomer('{{this._id}}')" class="btn btn-xs btn-outline-danger">
                           Delete
                         </button>
-                      </td>
+                      </td> --}}
                       {{/each}}
                   </tbody>
                 </table>

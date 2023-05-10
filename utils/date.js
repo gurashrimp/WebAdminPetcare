@@ -8,5 +8,5 @@ exports.format = (value, type) => {
     if (type == 1) {
         return day + '-' + month + '-' + year;
     }
-    return year + '-' + month + '-' + day;
+    return day + '-' + month + '-' + year;
 }
